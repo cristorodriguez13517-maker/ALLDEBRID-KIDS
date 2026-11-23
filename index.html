@@ -1653,40 +1653,49 @@ function closeSearch(){
 
 /* BUSCADOR DE PELÍCULAS Y SERIES */
 
-function filterCatalog(){
-    const query = searchInput.value.trim().toLocaleLowerCase('es');
-    const cards = [...movieRow.querySelectorAll('.movie')];
+function normalizarBusqueda(valor){
+    return String(valor || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g,'')
+        .toLocaleLowerCase('es')
+        .trim();
+}
+
+function filterSeries(){
+    const query = normalizarBusqueda(searchInput.value);
+    const cards = [...grid.querySelectorAll('.movie')];
     let firstMatch = null;
 
     cards.forEach(card => {
-        const text = [
+        const text = normalizarBusqueda([
             card.dataset.title,
             card.dataset.year,
             card.dataset.genres,
             card.dataset.quality,
             card.dataset.age,
-            card.dataset.overview
-        ].join(' ').toLocaleLowerCase('es');
+            card.dataset.overview,
+            card.dataset.kind
+        ].join(' '));
 
-        const matches = text.includes(query);
+        const matches = !query || text.includes(query);
         card.hidden = !matches;
-
         if (matches && !firstMatch) firstMatch = card;
     });
 
-    sharkVisibleCards = cards.filter(card => !card.hidden);
-    sharkLastFocusedRow = -1;
+    sharkVisibleSeries = cards.filter(card => !card.hidden);
+    sharkLastFocusedSeriesRow = -1;
 
     if (firstMatch) {
-        statusElement.hidden = true;
-        selectMovie(firstMatch);
+        statusEl.hidden = true;
+        selectSeries(firstMatch);
     } else if (query) {
-        selectedMovie = null;
-        limpiarBanner();
-        statusElement.hidden = false;
-        statusElement.textContent = 'No se han encontrado contenidos.';
+        selectedSeries = null;
+        info.classList.remove('visible');
+        header.style.backgroundImage = 'none';
+        statusEl.hidden = false;
+        statusEl.textContent = 'No se han encontrado series.';
     } else {
-        statusElement.hidden = cards.length === 0;
+        statusEl.hidden = cards.length === 0;
     }
 }
 
