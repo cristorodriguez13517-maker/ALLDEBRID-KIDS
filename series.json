@@ -5,7 +5,7 @@
     "title": "Bluey",
     "poster": "https://image.tmdb.org/t/p/w780/mspONkqgKmRuwc2wOYqs1MdwZNB.jpg",
     "backdrop": "https://image.tmdb.org/t/p/original/tWdNZ3xuFBhJ2ZoQ9vShNGHTb85.jpg",
-    "logo": "https://image.tmdb.org/t/p/w780/uFYNVaPt6dz1PH6tZ4vfdyOnKS.png",
+    "logo": "",
     "overview": "Bluey es una perrita de seis años incansable. Esta pastor ganadero australiano azul convierte el día a día con su familia en una aventura extraordinaria y desarrolla así tanto su imaginación como su capacidad mental, física y emocional.",
     "first_air_date": "2018-10-01",
     "genres": [
@@ -17,7 +17,8 @@
     "age_rating": "TP+",
     "number_of_seasons": 4,
     "quality": "",
-    "added_at": "2026-11-18T17:29:14+00:00"
+    "added_at": "2026-11-18T17:29:14+00:00",
+    "logo_selection_version": 3
   },
   {
     "id": 16047,
@@ -36,6 +37,7 @@
     "age_rating": "7+",
     "number_of_seasons": 1,
     "quality": "",
-    "added_at": "2026-11-18T17:25:18+00:00"
+    "added_at": "2026-11-18T17:25:18+00:00",
+    "logo_selection_version": 3
   }
 ]
