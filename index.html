@@ -1421,7 +1421,7 @@ function renderCatalog(){
     });
 
 
-    filterCatalog();
+    filterSeries();
 
 }
 
@@ -1640,7 +1640,7 @@ function closeSearch(){
 
     searchInput.value = '';
 
-    filterCatalog();
+    filterSeries();
 
     searchInput.classList.remove('active');
 
@@ -1745,7 +1745,7 @@ movieRow.addEventListener('click',event=>{
 
 searchButton.addEventListener('click',openSearch);
 
-searchInput.addEventListener('input',filterCatalog);
+searchInput.addEventListener('input',filterSeries);
 
 searchInput.addEventListener('blur', () => {
     if (!searchInput.value.trim()) {
