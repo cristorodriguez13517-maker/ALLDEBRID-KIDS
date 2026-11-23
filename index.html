@@ -1661,20 +1661,25 @@ function normalizarBusqueda(valor){
         .trim();
 }
 
-function filterSeries(){
+function filterCatalog(){
     const query = normalizarBusqueda(searchInput.value);
-    const cards = [...grid.querySelectorAll('.movie')];
+    const cards = [...movieRow.querySelectorAll('.movie')];
     let firstMatch = null;
 
     cards.forEach(card => {
         const text = normalizarBusqueda([
             card.dataset.title,
+            card.dataset.originalTitle,
+            card.dataset.alternativeTitle,
+            card.dataset.youtubeTitle,
             card.dataset.year,
             card.dataset.genres,
             card.dataset.quality,
             card.dataset.age,
             card.dataset.overview,
-            card.dataset.kind
+            card.dataset.description,
+            card.dataset.fileName,
+            card.dataset.tmdbId
         ].join(' '));
 
         const matches = !query || text.includes(query);
@@ -1682,20 +1687,22 @@ function filterSeries(){
         if (matches && !firstMatch) firstMatch = card;
     });
 
-    sharkVisibleSeries = cards.filter(card => !card.hidden);
-    sharkLastFocusedSeriesRow = -1;
+    sharkVisibleCards = cards.filter(card => !card.hidden);
+    sharkLastFocusedRow = -1;
 
     if (firstMatch) {
-        statusEl.hidden = true;
-        selectSeries(firstMatch);
+        statusElement.hidden = true;
+        selectMovie(firstMatch);
     } else if (query) {
-        selectedSeries = null;
-        info.classList.remove('visible');
-        header.style.backgroundImage = 'none';
-        statusEl.hidden = false;
-        statusEl.textContent = 'No se han encontrado series.';
+        limpiarBanner();
+        statusElement.hidden = false;
+        statusElement.textContent = 'No se han encontrado contenidos.';
     } else {
-        statusEl.hidden = cards.length === 0;
+        statusElement.hidden = cards.length === 0;
+        if (cards.length) {
+            const statusMessage = statusElement.textContent || '';
+            if (statusMessage === 'No se han encontrado contenidos.') statusElement.textContent = '';
+        }
     }
 }
 
