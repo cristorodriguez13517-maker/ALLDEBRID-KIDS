@@ -473,6 +473,7 @@ async function reproducirConWorker(tipo,registro){
     reproduccionEnCurso=true;
     try{
         const url=await obtenerEnlaceDirecto(tipo,registro);
+        if(window.__sharkRecordWorker)window.__sharkRecordWorker(tipo,registro,url);
         abrirVLC(url);
     }catch(error){console.error('Error de reproducción:',error);alert(error.message||'No se pudo iniciar la reproducción.');}
     finally{
@@ -1025,6 +1026,7 @@ async function loadSeriesDetail(){
 
         statusEl.hidden=true;
         mostrarTemporada(0);
+        if(window.__sharkResumeAllDebrid)window.__sharkResumeAllDebrid(temporadas.flatMap(t=>t.capitulos||[]));
 
     }catch(error){
         console.error(error);
@@ -1191,5 +1193,34 @@ async function iniciar(){
 
 iniciar();
 </script>
+
+<script id="SHARKTV_CONTINUE_INTEGRATION_V1">
+(function(){
+ const KEY='sharktv_seguir_viendo_v1',REPO='ALLDEBRID-KIDS';
+ function read(){try{const a=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(a)?a:[]}catch(e){return[]}}
+ function save(data){
+  try{
+   const list=read(),id=String(data.id||data.title||Date.now()),key=REPO+'|'+id;
+   const item={id:key,title:data.title||'Contenido',poster:data.poster||'',url:data.resumeUrl||'',sourceUrl:'',player:'VLC',repo:REPO,kind:data.kind||'episode',magnetId:data.magnetId||'',filePath:data.filePath||'',seriesId:data.seriesId||'',percent:0,updatedAt:Date.now()};
+   localStorage.setItem(KEY,JSON.stringify([item,...list.filter(x=>String(x.id)!==key)].slice(0,80)));
+  }catch(e){console.warn('No se pudo guardar Seguir viendo:',e)}
+ }
+ window.__sharkRecordWorker=function(tipo,registro,streamUrl){
+  const epTitle=document.querySelector('#episode-title,.episode-title');
+  const seriesId=new URLSearchParams(location.search).get('id')||'';
+  const title=(epTitle&&epTitle.textContent)||(registro&&(registro.title||registro.titulo||registro.file_path))||'Episodio';
+  save({id:String(seriesId)+'|'+String(registro&&registro.magnet_id||'')+'|'+String(registro&&registro.file_path||''),title,poster:(registro&&(registro.imagen||registro.poster))||'',resumeUrl:location.origin+'/ALLDEBRID-KIDS/series.html?id='+encodeURIComponent(seriesId),kind:'episode',magnetId:registro&&registro.magnet_id||'',filePath:registro&&registro.file_path||'',seriesId});
+ };
+ window.__sharkResumeAllDebrid=function(items){
+  const params=new URLSearchParams(location.search),magnet=params.get('shark_magnet'),file=params.get('shark_path');
+  if(!magnet||!file||window.__sharkResumeStarted)return;
+  const record=(Array.isArray(items)?items:[]).find(x=>String(x&&x.magnet_id||'')===magnet&&String(x&&x.file_path||'')===file);
+  if(!record){console.warn('No se encontró el episodio AllDebrid para reanudar.');return;}
+  window.__sharkResumeStarted=true;
+  setTimeout(()=>reproducirConWorker('episode',record),500);
+ };
+})();
+</script>
+
 </body>
 </html>
