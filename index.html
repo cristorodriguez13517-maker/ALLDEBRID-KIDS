@@ -1383,6 +1383,7 @@ function renderCatalog(){
     youtubeCard.dataset.title = '+ CONTENIDO';
     youtubeCard.dataset.overview = 'Abre el catálogo infantil de YouTube.';
     youtubeCard.setAttribute('aria-label', 'Más contenido: abrir catálogo infantil de YouTube');
+    youtubeCard.addEventListener('focus',()=>selectMovie(youtubeCard));
     const youtubeArtwork = document.createElement('div');
     youtubeArtwork.className = 'youtube-catalog-artwork';
     youtubeArtwork.innerHTML = '<svg viewBox="0 0 72 52" aria-hidden="true"><rect x="2" y="2" width="68" height="48" rx="12" fill="#f00"/><path d="M30 15v22l19-11z" fill="#fff"/></svg><span>+ CONTENIDO</span>';
@@ -2229,8 +2230,6 @@ async function iniciar(){
         requestAnimationFrame(()=>{
             const firstContent=visibleCards().find(card=>card.dataset.type!=='shortcut');
             if(firstContent)renderMovieHeader(firstContent);
-            header.style.backgroundImage = 'url("./contenido-kids.svg")';
-            header.classList.add('has-banner');
         });
     });
 
