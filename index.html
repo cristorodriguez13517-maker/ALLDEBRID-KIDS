@@ -2226,8 +2226,8 @@ async function iniciar(){
 
     requestAnimationFrame(()=>{
         requestAnimationFrame(()=>{
-            const first=visibleCards()[0];
-            if(first)renderMovieHeader(first);
+            const firstContent=visibleCards().find(card=>card.dataset.type!=='shortcut');
+            if(firstContent)renderMovieHeader(firstContent);
         });
     });
 
