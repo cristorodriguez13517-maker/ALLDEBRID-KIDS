@@ -1186,7 +1186,7 @@ iniciar();
  function save(data){
   try{
    const list=read(),id=String(data.id||data.title||Date.now()),key=REPO+'|'+id;
-   const item={id:key,title:data.title||'Contenido',poster:data.poster||'',url:data.resumeUrl||'',sourceUrl:'',player:'VLC',repo:REPO,kind:data.kind||'episode',magnetId:data.magnetId||'',filePath:data.filePath||'',seriesId:data.seriesId||'',percent:0,updatedAt:Date.now()};
+   const item={id:key,title:data.title||'Contenido',poster:data.poster||'',url:data.resumeUrl||'',sourceUrl:'',player:'VLC',repo:REPO,kind:data.kind||'episode',magnetId:data.magnetId||'',filePath:data.filePath||'',seriesId:data.seriesId||'',catalogId:data.catalogId||'',percent:0,updatedAt:Date.now()};
    localStorage.setItem(KEY,JSON.stringify([item,...list.filter(x=>String(x.id)!==key)].slice(0,80)));
   }catch(e){console.warn('No se pudo guardar Seguir viendo:',e)}
  }
